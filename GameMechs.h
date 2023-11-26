@@ -21,6 +21,8 @@ class GameMechs
     private:
         char input;
         bool exitFlag;
+        bool looseFlag; 
+        int score; 
         
         int boardSizeX;
         int boardSizeY;
