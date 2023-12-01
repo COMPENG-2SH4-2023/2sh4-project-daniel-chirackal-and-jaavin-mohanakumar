@@ -21,16 +21,25 @@ class GameMechs
     private:
         char input;
         bool exitFlag;
-        bool looseFlag; 
-        int score; 
-        
+        bool loseFlag;
+        int score;
+
         int boardSizeX;
         int boardSizeY;
 
-    public:
+        int delayConst;
+
+
+        void initGameBoard();
+
+
+public:
         GameMechs();
         GameMechs(int boardX, int boardY);
-        
+
+        ~GameMechs();
+
+
         bool getExitFlagStatus();
         void setExitTrue();
 
@@ -40,7 +49,13 @@ class GameMechs
 
         int getBoardSizeX();
         int getBoardSizeY();
-      
+
+        int getDelayConst();
+
+        void setGameBoardPos(int xPos, int yPos, char sym);
+        char getGameBoardSymbol(int xPos, int yPos);
+
+        objPos** gameBoard;
 
 };
 

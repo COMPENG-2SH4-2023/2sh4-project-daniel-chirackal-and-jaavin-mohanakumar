@@ -41,6 +41,26 @@ void objPos::getObjPos(objPos &returnPos)
     returnPos.setObjPos(x, y, symbol);
 }
 
+int objPos::getX()
+{
+    return x;
+}
+
+int objPos::getY()
+{
+    return y;
+}
+
+void objPos::setX(int xPos)
+{
+    x = xPos;
+}
+
+void objPos::setY(int yPos)
+{
+    y = yPos;
+}
+
 char objPos::getSymbol()
 {
     return symbol;

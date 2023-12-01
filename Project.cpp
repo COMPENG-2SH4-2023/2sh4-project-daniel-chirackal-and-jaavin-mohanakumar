@@ -4,12 +4,12 @@
 #include "GameMechs.h"
 #include "Player.h"
 
+
 using namespace std;
 
-#define DELAY_CONST 100000
+GameMechs* gameMechs;
+Player* player;
 
-GameMechs* myGM; 
-Player* myPlayer; 
 
 void Initialize(void);
 void GetInput(void);
@@ -18,10 +18,6 @@ void DrawScreen(void);
 void LoopDelay(void);
 void CleanUp(void);
 
-objPos Edge; 
-objPos Space; 
-objPos Null; 
-objPos Player;
 
 
 int main(void)
@@ -29,15 +25,13 @@ int main(void)
 
     Initialize();
 
-    while(myGM->getExitFlagStatus() == false)  
+    while(!gameMechs->getExitFlagStatus())
     {
         GetInput();
         RunLogic();
         DrawScreen();
         LoopDelay();
     }
-
-    myDir = STOP; 
 
     CleanUp();
 
@@ -49,81 +43,76 @@ void Initialize(void)
     MacUILib_init();
     MacUILib_clearScreen();
 
-    Edge.setObjPos(0, 0, '#'); 
-    Space.setObjPos(0, 0, ' '); 
-    Null.setObjPos(0, 0, '\0'); 
-    Player.setObjPos(10, 5, '*');
 
-    myGM = new GameMechs(26, 13); 
-    myPlayer = new Player(myGM); 
+    gameMechs = new GameMechs(30, 10);
 
+    player = new Player(gameMechs);
 }
 
 void GetInput(void)
 {
-
+    if (MacUILib_hasChar()) {
+        gameMechs->setInput(MacUILib_getChar());
+    }
+   
 }
 
 void RunLogic(void)
 {
-    myPlayer->updatePlayerDir(); 
+
+    if (gameMechs->getInput() != 0)  // if not null character
+    {
+
+        if (gameMechs->getInput() == ' ') {
+            gameMechs->setExitTrue();
+        } else if (gameMechs->getInput() == 't'){
+            player->increasePlayerLen();
+        }
+        else {
+            player->updatePlayerDir();
+        }
+        gameMechs->clearInput();
+    }
+
+    player->movePlayer();
 }
 
 void DrawScreen(void)
 {
-    MacUILib_clearScreen();   
+    MacUILib_clearScreen();
 
-    int i = 0;
-    int array_x = 0; 
-    int array_y = 0; 
-
-    char map_x_arr[mainGameMechsRef->getBoardSizeX] = {0};
-       
-        for (array_y = 0; array_y < mainGameMechsRef->getBoardSizeY; array_y++)
-        {
-            if (array_y == 0 || array_y == (mainGameMechsRef->getBoardSizeY-1)) // Printing the border (all '#' when y=0 or y=9)
-            {
-                for (i = 0; i <= (mainGameMechsRef->getBoardSizeX-2); i++)
-                {
-                    map_x_arr[i] = Edge.symbol;
-                     
-                } 
-            }
-
-            else if (array_y != 0 && array_y !=  (mainGameMechsRef->getBoardSizeY-1))
-            {                       
-                map_x_arr[0] = Edge.symbol;
-                map_x_arr[(mainGameMechsRef->getBoardSizeX-2)] = Edge.symbol;
-
-                for (i=0; i < (mainGameMechsRef->getBoardSizeX-2); i++) // For-loop purpose: Wherever there is no item/user, put a space
-                {
-                    if (map_x_arr[i] == Null.symbol)
-                    {
-                        map_x_arr[i] = Space.symbol;
-                    }
-                }
-
-                if(array_y == Player.y)
-                {
-                    map_x_arr[Player.x] = Player.symbol; 
+    for(int i = 0; i < gameMechs->getBoardSizeY(); i++) {
+        for (int j = 0; j < gameMechs->getBoardSizeX(); j++) {
+            bool isPlayer = false;
+            for (int k = 0; k < player->getPlayerPos().getSize(); k++) {
+                objPos temp;
+                player->getPlayerPos().getElement(temp, k);
+                if (temp.getX() == j && temp.getY() == i) {
+                    MacUILib_printf("%c", temp.getSymbol());
+                    isPlayer = true;
                 }
             }
-
-            MacUILib_printf("%s", map_x_arr);
-            MacUILib_printf("\n");
-
-            for (i = 0; i < (mainGameMechsRef->getBoardSizeX-1); i++) 
-            {
-                map_x_arr[i] = Null.symbol;
+            if (i == 0 || i == gameMechs->getBoardSizeY() - 1 || j == 0 || j == gameMechs->getBoardSizeX() - 1){
+                MacUILib_printf("%c", '#');
+            } else if (!isPlayer) {
+                MacUILib_printf("%c", gameMechs->getGameBoardSymbol(j, i));
             }
+        }
+        MacUILib_printf("\n");
+    }
 
-        }     
 
+//    for (int i = 0; i < player->getPlayerPos().getSize(); i++) {
+//        objPos temp;
+//        player->getPlayerPos().getElement(temp, i);
+//        MacUILib_printf("Player X: %d\n", temp.getX());
+//        MacUILib_printf("Player Y: %d\n", temp.getY());
+//    }
 }
 
 void LoopDelay(void)
 {
-    MacUILib_Delay(DELAY_CONST); // 0.1s delay
+    MacUILib_Delay(gameMechs->getDelayConst());
 }
 
 
