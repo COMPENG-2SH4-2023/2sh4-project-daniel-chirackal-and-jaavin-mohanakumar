@@ -28,20 +28,13 @@ class GameMechs
         int boardSizeX;
         int boardSizeY;
 
-        int delayConst;
+    public:
 
 
-        void initGameBoard();
-
-
-public:
-        //Constructors
         GameMechs();
         GameMechs(int boardX, int boardY);
-
-        ~GameMechs();
-
-        //Getters, and Setters
+        
+        
         bool getExitFlagStatus();
         void setExitTrue();
 

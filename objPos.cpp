@@ -52,36 +52,6 @@ void objPos::getObjPos(objPos &returnPos)
     returnPos.setObjPos(x, y, symbol);
 }
 
-//Gives x coordinate
-
-int objPos::getX()
-{
-    return x;
-}
-
-//Gives y coordinate
-
-int objPos::getY()
-{
-    return y;
-}
-
-//Sets x coordinate to input given 
-
-void objPos::setX(int xPos)
-{
-    x = xPos;
-}
-
-//Sets y coordinate to input given 
-
-void objPos::setY(int yPos)
-{
-    y = yPos;
-}
-
-//Retrives symbol for manipulation 
-
 char objPos::getSymbol()
 {
     return symbol;

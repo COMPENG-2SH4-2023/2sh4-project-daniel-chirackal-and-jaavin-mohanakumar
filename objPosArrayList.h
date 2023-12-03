@@ -2,6 +2,7 @@
 #define OBJPOS_ARRAYLIST_H
 
 #define ARRAY_MAX_CAP 256
+#define ARRAY_MAX_CAP 256
 
 #include "objPos.h"
 
