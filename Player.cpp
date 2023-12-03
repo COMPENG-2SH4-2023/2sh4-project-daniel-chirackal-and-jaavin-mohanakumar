@@ -13,14 +13,6 @@ Player::Player(GameMechs* thisGMRef)
 
 
     playerPosList->insertHead(temp);
-//
-//    objPos temp2;
-//    temp2.setObjPos(mainGameMechsRef->getBoardSizeX() / 2, mainGameMechsRef->getBoardSizeY() / 2 + 1, '*' );
-//    playerPosList->insertHead(temp2);
-//
-//    objPos temp3;
-//    temp3.setObjPos(mainGameMechsRef->getBoardSizeX() / 2, mainGameMechsRef->getBoardSizeY() / 2 + 2, '*' );
-//    playerPosList->insertHead(temp3);
 
     // more actions to be included
 }
@@ -37,11 +29,11 @@ objPosArrayList& Player::getPlayerPos()
     return *playerPosList;
 }
 
-bool Player::increasePlayerLen(){
+void Player::increasePlayerLen(){
     objPos temp;
-    // get food position!!!!!
-    temp.setObjPos(getPlayerPosX(), getPlayerPosY(), '*');
-    playerPosList->insertHead(temp);
+    mainGameMechsRef->getFoodPos(temp);
+    temp.setObjPos(temp.getX(), temp.getY(), '*');
+    playerPosList->insertTail(temp);
 }
 
 int Player::getPlayerPosX()
@@ -105,6 +97,20 @@ void Player::movePlayer()
     int currentX = getPlayerPosX();
     int currentY = getPlayerPosY();
 
+    // check if touch food
+    if (checkSelfCollision()) {
+        mainGameMechsRef->setExitTrue();
+        return;
+    } else if (mainGameMechsRef->getGameBoardSymbol(currentX, currentY) == 'o') {
+        increasePlayerLen();
+
+        objPos oldFood;
+        mainGameMechsRef->getFoodPos(oldFood);
+        mainGameMechsRef->setGameBoardPos(oldFood.getX(), oldFood.getY(), ' ');
+
+        mainGameMechsRef->generateFood(getPlayerPos());
+    }
+
     switch (myDir) {
         case UP:
             updatePlayerPos(currentX, (currentY == 1) ? mainGameMechsRef->getBoardSizeY() - 2 : currentY - 1);
@@ -123,3 +129,17 @@ void Player::movePlayer()
     }
 }
 
+bool Player::checkSelfCollision()
+{
+    objPos head;
+    playerPosList->getHeadElement(head);
+
+    for (int i = 1; i < playerPosList->getSize(); i++) {
+        objPos temp;
+        playerPosList->getElement(temp, i);
+        if (head.getX() == temp.getX() && head.getY() == temp.getY()) {
+            return true;
+        }
+    }
+    return false;
+}

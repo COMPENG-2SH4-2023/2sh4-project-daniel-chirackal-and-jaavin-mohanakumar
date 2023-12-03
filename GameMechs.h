@@ -23,6 +23,7 @@ class GameMechs
         bool exitFlag;
         bool loseFlag;
         int score;
+        objPos foodPos;
 
         int boardSizeX;
         int boardSizeY;
@@ -54,6 +55,10 @@ public:
 
         void setGameBoardPos(int xPos, int yPos, char sym);
         char getGameBoardSymbol(int xPos, int yPos);
+
+        void generateFood(objPosArrayList &blockOFF);
+        void getFoodPos(objPos &returnPos);
+
 
         objPos** gameBoard;
 

@@ -27,7 +27,8 @@ class Player
         int getPlayerPosX();
         int getPlayerPosY();
 
-        bool increasePlayerLen();
+        void increasePlayerLen();
+
 
 
 
@@ -35,6 +36,9 @@ class Player
         objPosArrayList* playerPosList;
 
         enum Dir myDir;
+
+        bool checkSelfCollision();
+
 
         void updatePlayerPos(int newX, int newY);
         // Need a reference to the Main Game Mechanisms

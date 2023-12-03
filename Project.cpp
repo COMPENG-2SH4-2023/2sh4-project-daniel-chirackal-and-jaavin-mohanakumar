@@ -47,6 +47,8 @@ void Initialize(void)
     gameMechs = new GameMechs(30, 10);
 
     player = new Player(gameMechs);
+
+    gameMechs->generateFood(player->getPlayerPos());
 }
 
 void GetInput(void)
@@ -66,7 +68,8 @@ void RunLogic(void)
         if (gameMechs->getInput() == ' ') {
             gameMechs->setExitTrue();
         } else if (gameMechs->getInput() == 't'){
-            player->increasePlayerLen();
+
+            gameMechs->generateFood(player->getPlayerPos());
         }
         else {
             player->updatePlayerDir();
@@ -83,6 +86,7 @@ void DrawScreen(void)
 
     for(int i = 0; i < gameMechs->getBoardSizeY(); i++) {
         for (int j = 0; j < gameMechs->getBoardSizeX(); j++) {
+
             bool isPlayer = false;
             for (int k = 0; k < player->getPlayerPos().getSize(); k++) {
                 objPos temp;
@@ -101,13 +105,9 @@ void DrawScreen(void)
         MacUILib_printf("\n");
     }
 
-
-//    for (int i = 0; i < player->getPlayerPos().getSize(); i++) {
-//        objPos temp;
-//        player->getPlayerPos().getElement(temp, i);
-//        MacUILib_printf("Player X: %d\n", temp.getX());
-//        MacUILib_printf("Player Y: %d\n", temp.getY());
-//    }
+    MacUILib_printf("--------------------\n");
+    MacUILib_printf("Score: %d\n", player->getPlayerPos().getSize() - 1);
+    MacUILib_printf("Press space to exit\n");
 }
 
 void LoopDelay(void)
@@ -119,6 +119,9 @@ void LoopDelay(void)
 void CleanUp(void)
 {
     MacUILib_clearScreen();    
-  
+
+    MacUILib_printf("Game Over!\n");
+    MacUILib_printf("Your score is: %d\n", player->getPlayerPos().getSize() - 1);
+
     MacUILib_uninit();
 }

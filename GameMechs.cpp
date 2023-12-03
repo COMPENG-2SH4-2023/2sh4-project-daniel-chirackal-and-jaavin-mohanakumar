@@ -1,4 +1,6 @@
 #include "GameMechs.h"
+#include <cstdlib>
+#include <ctime>
 
 GameMechs::GameMechs()
 {
@@ -11,11 +13,14 @@ GameMechs::GameMechs()
 
     delayConst = 100000;
 
+
     gameBoard = new objPos*[boardSizeY];
     for (int i = 0; i < boardSizeY; i++)
     {
         gameBoard[i] = new objPos[boardSizeX];
     }
+
+    std::srand(std::time(0));
 
     initGameBoard();
 }
@@ -36,6 +41,8 @@ GameMechs::GameMechs(int boardX, int boardY)
     {
         gameBoard[i] = new objPos[boardX];
     }
+
+    std::srand(std::time(0));
 
     initGameBoard();
 }
@@ -115,3 +122,27 @@ void GameMechs::setGameBoardPos(int xPos, int yPos, char sym){
 char GameMechs::getGameBoardSymbol(int xPos, int yPos){
     return gameBoard[yPos][xPos].getSymbol();
 }
+
+void GameMechs::generateFood(objPosArrayList &blockOFF){
+
+    int randX = rand() % (boardSizeX - 2) + 1;
+    int randY = rand() % (boardSizeY - 2) + 1;
+    while (gameBoard[randY][randX].getSymbol() != ' '){
+        for (int i = 0; i < blockOFF.getSize(); i++){
+            objPos temp;
+            blockOFF.getElement(temp, i);
+            if (temp.getX() == randX && temp.getY() == randY){
+                randX = rand() % (boardSizeX - 2) + 1;
+                randY = rand() % (boardSizeY - 2) + 1;
+                break;
+            }
+        }
+    }
+    foodPos.setObjPos(randX, randY, 'o');
+    gameBoard[randY][randX].setObjPos(foodPos);
+}
+
+void GameMechs::getFoodPos(objPos &returnPos){
+    returnPos.setObjPos(foodPos);
+}
+
