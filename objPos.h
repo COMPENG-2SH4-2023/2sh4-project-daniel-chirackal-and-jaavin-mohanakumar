@@ -1,22 +1,25 @@
-    #ifndef OBJPOS_H
+#ifndef OBJPOS_H
     #define OBJPOS_H
 
-class objPos
-{
-    public:
-        int x;
-        int y;
-        char symbol;
+    class objPos
+    {
+        public:
+            int x;
+            int y;
+            char symbol;
 
-        objPos();
-        objPos(objPos &o); // copy constructor
-        objPos(int xPos, int yPos, char sym);
+            objPos();
+            objPos(objPos &o); // copy constructor
+            objPos(int xPos, int yPos, char sym);
 
-        void setObjPos(objPos o);        
-        void setObjPos(int xPos, int yPos, char sym);  
-        void getObjPos(objPos &returnPos);
-        char getSymbol();
-        char Boarder(char array_line[]);
+            void setObjPos(objPos o);
+            void setObjPos(int xPos, int yPos, char sym);
+            void getObjPos(objPos &returnPos);
+            int getX();
+            int getY();
+            void setX(int xPos);
+            void setY(int yPos);
+            char getSymbol();
 
             bool isPosEqual(const objPos* refPos);
 
